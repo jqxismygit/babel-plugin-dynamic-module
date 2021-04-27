@@ -1,0 +1,26 @@
+{
+  "name": "babel-plugin-dynamic-module",
+  "version": "0.0.1",
+  "description": "支持动态模块的babel插件",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "father-build"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jqxismygit/babel-plugin-dynamic-module.git"
+  },
+  "author": "king",
+  "license": "MIT",
+  "homepage": "https://github.com/jqxismygit/babel-plugin-dynamic-module#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "jest": "^25.1.0",
+    "father-build": "^1.17.2"
+  }
+}
