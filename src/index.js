@@ -1,7 +1,11 @@
 const defaultModules = ['@sensoro/core', '@sensoro/layout', '@sensoro/library'];
 
+//这个算法和umi-plugin-dynamic-module保持一致
 function sourceFormatter(moduleName) {
-  return `window._${moduleName.replace(/\@/g, '').replace(/\//g, '')}_`;
+  return `window.${moduleName
+    .replace(/\@/g, '')
+    .replace(/\//g, '$')
+    .replace(/\-/g, '$')}`;
 }
 
 export default function ({ types, template }) {
@@ -17,7 +21,7 @@ export default function ({ types, template }) {
 
         const source = sourceFormatter(node.source.value);
         //导出的默认
-        let defaultExport;
+        let defaultNameSpaceExport;
         let exports = [];
         node.specifiers.forEach((specifier) => {
           if (specifier.type === 'ImportSpecifier') {
@@ -25,7 +29,11 @@ export default function ({ types, template }) {
               specifier.imported.name === 'default' &&
               specifier.imported.name !== specifier.local.name
             ) {
-              defaultExport = specifier.local.name;
+              // defaultExport = specifier.local.name;
+              exports.push({
+                imported: 'default',
+                local: specifier.local.name,
+              });
             } else if (specifier.imported.name !== specifier.local.name) {
               exports.push({
                 imported: specifier.imported.name,
@@ -34,36 +42,36 @@ export default function ({ types, template }) {
             } else {
               exports.push(specifier.local.name);
             }
-          } else if (
-            specifier.type === 'ImportDefaultSpecifier' ||
-            specifier.type === 'ImportNamespaceSpecifier'
-          ) {
-            defaultExport = specifier.local.name;
+          } else if (specifier.type === 'ImportDefaultSpecifier') {
+            // defaultExport = specifier.local.name;
+            exports.push({
+              imported: 'default',
+              local: specifier.local.name,
+            });
+          } else if (specifier.type === 'ImportNamespaceSpecifier') {
+            // exports.push(specifier.local.name);
+            defaultNameSpaceExport = specifier.local.name;
           }
         });
 
         let sourceString = '';
-        if (defaultExport) {
-          sourceString = `const ${defaultExport} = ${source};`;
+        if (defaultNameSpaceExport) {
+          sourceString = `const ${defaultNameSpaceExport} = ${source};`;
         }
         if (exports.length > 0) {
           sourceString += `const {`;
           exports.forEach((element) => {
             if (typeof element === 'object') {
-              sourceString += `${element.imported}:${element.local}`;
+              sourceString += `${element.imported}:${element.local},`;
             } else {
               sourceString += `${element},`;
             }
           });
-          sourceString += `} = ${defaultExport ? defaultExport : source}`;
+          sourceString += `} = ${source}`;
         }
         const ast = template.ast(sourceString);
 
-        if (defaultExport && exports.length > 0) {
-          path.replaceWithMultiple(ast);
-        } else {
-          path.replaceWith(ast);
-        }
+        path.replaceWithMultiple(ast);
       },
     },
   };

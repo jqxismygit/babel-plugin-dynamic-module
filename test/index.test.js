@@ -11,7 +11,7 @@ describe('plugin test', () => {
   usePassport,
   useSocket,
   request
-} = window._sensorocore_;`);
+} = window.sensoro$core;`);
   });
 
   it('test case 2', () => {
@@ -19,7 +19,7 @@ describe('plugin test', () => {
     const result = babel.transform(code, {
       plugins: [myPlugin],
     });
-    expect(result.code).toBe('const Core = window._sensorocore_;');
+    expect(result.code).toBe(`const Core = window.sensoro$core;`);
   });
 
   it('test case 3', () => {
@@ -27,7 +27,9 @@ describe('plugin test', () => {
     const result = babel.transform(code, {
       plugins: [myPlugin],
     });
-    expect(result.code).toBe('const Core = window._sensorocore_;');
+    expect(result.code).toBe(`const {
+  default: Core
+} = window.sensoro$core;`);
   });
 
   it('test case 4', () => {
@@ -35,10 +37,10 @@ describe('plugin test', () => {
     const result = babel.transform(code, {
       plugins: [myPlugin],
     });
-    expect(result.code).toBe(`const A = window._sensorocore_;
-const {
+    expect(result.code).toBe(`const {
+  default: A,
   B
-} = A;`);
+} = window.sensoro$core;`);
   });
 
   it('test case 5', () => {
@@ -46,10 +48,10 @@ const {
     const result = babel.transform(code, {
       plugins: [myPlugin],
     });
-    expect(result.code).toBe(`const C = window._sensorocore_;
-const {
+    expect(result.code).toBe(`const {
+  default: C,
   D
-} = C;`);
+} = window.sensoro$core;`);
   });
 
   it('test case 6', () => {
@@ -59,7 +61,7 @@ const {
     });
     expect(result.code).toBe(`const {
   A: B
-} = window._sensorocore_;`);
+} = window.sensoro$core;`);
   });
   // [myPlugin, { modules: ['123'] }]
 
@@ -78,6 +80,6 @@ const {
     });
     expect(result.code).toBe(`const {
   get
-} = window._lodash_;`);
+} = window.lodash;`);
   });
 });
