@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-dynamic-module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "支持动态模块的babel插件",
   "main": "lib/index.js",
   "scripts": {

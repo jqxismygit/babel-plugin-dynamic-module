@@ -17,7 +17,10 @@ export default function ({ types, template }) {
         const { opts } = state;
         const { modules = defaultModules } = opts;
         // path maybe removed by prev instances.
-        if (modules.indexOf(node.source.value) === -1 || !node) return;
+        const dynamicModule = modules.some((module) =>
+          node.source.value.startsWith(module),
+        );
+        if (!dynamicModule || !node) return;
 
         const source = sourceFormatter(node.source.value);
         //导出的默认
