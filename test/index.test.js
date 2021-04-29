@@ -11,7 +11,7 @@ describe('plugin test', () => {
   usePassport,
   useSocket,
   request
-} = window.sensoro$core;`);
+} = window.sensoro$core$lib;`);
   });
 
   it('test case 2', () => {
@@ -19,7 +19,7 @@ describe('plugin test', () => {
     const result = babel.transform(code, {
       plugins: [myPlugin],
     });
-    expect(result.code).toBe(`const Core = window.sensoro$core;`);
+    expect(result.code).toBe(`const Core = window.sensoro$core$lib;`);
   });
 
   it('test case 3', () => {
@@ -29,7 +29,7 @@ describe('plugin test', () => {
     });
     expect(result.code).toBe(`const {
   default: Core
-} = window.sensoro$core;`);
+} = window.sensoro$core$lib;`);
   });
 
   it('test case 4', () => {
@@ -40,7 +40,7 @@ describe('plugin test', () => {
     expect(result.code).toBe(`const {
   default: A,
   B
-} = window.sensoro$core;`);
+} = window.sensoro$core$lib;`);
   });
 
   it('test case 5', () => {
@@ -51,7 +51,7 @@ describe('plugin test', () => {
     expect(result.code).toBe(`const {
   default: C,
   D
-} = window.sensoro$core;`);
+} = window.sensoro$core$lib;`);
   });
 
   it('test case 6', () => {
@@ -61,7 +61,7 @@ describe('plugin test', () => {
     });
     expect(result.code).toBe(`const {
   A: B
-} = window.sensoro$core;`);
+} = window.sensoro$core$lib;`);
   });
   // [myPlugin, { modules: ['123'] }]
 

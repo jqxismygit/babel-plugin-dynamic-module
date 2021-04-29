@@ -2,7 +2,13 @@ const defaultModules = ['@sensoro/core', '@sensoro/layout', '@sensoro/library'];
 
 //这个算法和umi-plugin-dynamic-module保持一致
 function sourceFormatter(moduleName) {
-  return `window.${moduleName
+  //统一处理成带/lib的形式,这里主要是为了统一
+  let m = moduleName;
+  const split = moduleName.split('/');
+  if(split.length === 2 && split[0] === '@sensoro'){
+    m = `${moduleName}/lib`
+  }
+  return `window.${m
     .replace(/\@/g, '')
     .replace(/\//g, '$')
     .replace(/\-/g, '$')}`;
